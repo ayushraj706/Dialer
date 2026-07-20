@@ -28,6 +28,10 @@ jobs:
       - name: Make gradlew executable
         run: chmod +x ./gradlew
 
+      # 👇 YAHAN NAYA STEP JODA HAI (Corrupt Wrapper Fix) 👇
+      - name: Fix Corrupted Gradle Wrapper
+        run: gradle wrapper
+
       # App ka release version build karna
       - name: Build release APK
         run: ./gradlew app:assembleRelease
