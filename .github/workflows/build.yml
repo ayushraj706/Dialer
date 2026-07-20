@@ -28,27 +28,29 @@ jobs:
       - name: Make gradlew executable
         run: chmod +x ./gradlew
 
-      # 👇 YAHAN NAYA STEP JODA HAI (Dummy file banane ke liye) 👇
+      # Dummy file banane ke liye
       - name: Create dummy local.properties
         run: touch local.properties
 
-      # 👇 YAHAN NAYA STEP JODA HAI (Corrupt Wrapper Fix) 👇
+      # Corrupt Wrapper Fix
       - name: Fix Corrupted Gradle Wrapper
         run: gradle wrapper
 
-      # App ka release version build karna
-      - name: Build release APK
-        run: ./gradlew app:assembleRelease
+      # 👇 YAHAN BADLAAV KIYA HAI (Sirf FOSS version build karega, Huawei ko ignore karega) 👇
+      - name: Build FOSS release APK
+        run: ./gradlew app:assembleFossRelease
 
       # On-the-fly Keystore banakar APK ko sign karna
       - name: Generate Keystore, Zipalign & Sign APK
         run: |
-          # 1. Virtual Keystore generate karega (No secrets needed!)
+          # 1. Virtual Keystore generate karega
           keytool -genkey -v -keystore release.keystore -alias rightdialer -keyalg RSA -keysize 2048 -validity 10000 -storepass android123 -keypass android123 -dname "CN=RightDialer,O=Developer,C=IN"
           
           # 2. Build Tools aur APK Path set karega
           BUILD_TOOLS_DIR=$(ls -d $ANDROID_HOME/build-tools/* | tail -1)
-          APK_DIR="app/build/outputs/apk/release"
+          
+          # 👇 YAHAN PATH BADLA HAI (Kyunki ab APK foss folder mein banega) 👇
+          APK_DIR="app/build/outputs/apk/foss/release"
           
           # 3. Jo Unsigned APK banega, usko automatically dhoondega
           TARGET_APK=$(find $APK_DIR -name "*.apk" | head -n 1)
@@ -66,4 +68,6 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: RightDialer-Signed-APK
-          path: app/build/outputs/apk/release/RightDialer-Signed-Release.apk
+          # 👇 YAHAN BHI PATH BADLA HAI 👇
+          path: app/build/outputs/apk/foss/release/RightDialer-Signed-Release.apk
+          
