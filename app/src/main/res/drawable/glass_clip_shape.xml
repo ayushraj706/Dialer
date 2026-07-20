@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    GLASSMORPHISM
+    This shape has NO visible fill. Its only job is to give the BlurView a
+    rounded-corner Outline (via setOutlineProvider(BACKGROUND) + clipToOutline)
+    so the frosted blur itself gets clipped into a pill / rounded-rect shape,
+    exactly like the iOS / WhatsApp floating bars.
+-->
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+    <corners android:radius="28dp" />
+    <solid android:color="@android:color/transparent" />
+</shape>
