@@ -35,22 +35,32 @@
             android:textSize="@dimen/bigger_text_size"
             android:visibility="gone" />
 
+        <!-- 
+            GLASSMORPHISM FIX:
+            clipToPadding="false" ke sath paddingTop 90dp aur paddingBottom 100dp di gayi hai
+            is-se contacts list top aur bottom glass bars ke bilkul PEECHE se scroll hogi!
+        -->
         <com.goodwy.commons.views.MyRecyclerView
             android:id="@+id/fragment_list"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:clipToPadding="false"
+            android:paddingTop="90dp"
+            android:paddingBottom="100dp"
             android:layoutAnimation="@anim/layout_animation"
-            android:paddingBottom="64dp"
             android:scrollbars="none"
             app:layoutManager="com.goodwy.commons.views.MyLinearLayoutManager"/>
 
+        <!-- FastScroller ko bhi thodi padding di hai taaki glass bars ke peeche na chhupe -->
         <com.reddit.indicatorfastscroll.FastScrollerView
             android:id="@+id/letter_fastscroller"
             android:layout_width="26dp"
             android:layout_height="match_parent"
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
+            android:clipToPadding="false"
+            android:paddingTop="90dp"
+            android:paddingBottom="100dp"
             android:paddingStart="@dimen/normal_margin"
             android:textAppearance="@style/LetterFastscrollerStyleSmall" />
 
