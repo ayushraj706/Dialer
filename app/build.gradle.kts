@@ -179,4 +179,8 @@ dependencies {
     //timer
     implementation(libs.bundles.lifecycle)
     ksp(libs.androidx.room.compiler)
+
+    // 👇 YAHAN ADD KIYA HAI HAZE (GLASSMORPHISM) 👇
+    implementation("dev.chrisbanes.haze:haze:1.1.1")
+    implementation("dev.chrisbanes.haze:haze-materials:1.1.1")
 }
