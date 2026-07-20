@@ -42,10 +42,15 @@
             android:visibility="gone"
             tools:visibility="visible" />
 
+        <!-- 
+            GLASSMORPHISM FIX:
+            Top glass bar ke peeche filters na chhupe isliye margin top 90dp diya hai 
+        -->
         <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/recents_filters_appbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="90dp"
             android:stateListAnimator="@null"
             android:background="@android:color/transparent"
             app:liftOnScroll="false"
@@ -70,24 +75,21 @@
             </HorizontalScrollView>
         </com.google.android.material.appbar.AppBarLayout>
 
+        <!-- 
+            GLASSMORPHISM FIX:
+            Bottom glass bar ke peeche aakhiri call log na chhupe isliye paddingBottom 100dp diya hai 
+        -->
         <com.goodwy.commons.views.MyRecyclerView
             android:id="@+id/recents_list"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:clipToPadding="false"
+            android:paddingBottom="100dp"
             android:layoutAnimation="@anim/layout_animation"
             android:scrollbarThumbVertical="@drawable/fastscroller_handle_vertical_gray"
             android:scrollbars="vertical"
             app:layout_behavior="@string/appbar_scrolling_view_behavior"
             app:layoutManager="com.goodwy.commons.views.MyLinearLayoutManager" />
-
-        <!--    <com.google.android.material.progressindicator.CircularProgressIndicator-->
-        <!--        android:id="@+id/progress_indicator"-->
-        <!--        android:layout_width="wrap_content"-->
-        <!--        android:layout_height="wrap_content"-->
-        <!--        android:layout_centerInParent="true"-->
-        <!--        android:indeterminate="true"-->
-        <!--        app:trackCornerRadius="@dimen/small_margin" />-->
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </com.goodwy.dialer.fragments.RecentsFragment>
