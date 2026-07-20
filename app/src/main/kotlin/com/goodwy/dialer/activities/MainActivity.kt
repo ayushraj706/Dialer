@@ -21,6 +21,9 @@ import android.telecom.Call
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.view.ViewOutlineProvider
+import androidx.core.graphics.ColorUtils
+import eightbitlab.com.blurview.BlurView
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
@@ -90,10 +93,11 @@ class MainActivity : SimpleActivity() {
         val useBottomNavigationBar = config.bottomNavigationBar
         val oneTabs: Boolean = getAllFragments().size == 1 || !useBottomNavigationBar
         setupEdgeToEdge(
-            padBottomImeAndSystem = listOf(binding.mainTabsHolder),
+            padBottomImeAndSystem = listOf(binding.mainTabsGlassWrapper),
             moveBottomSystem = if (oneTabs) listOf(binding.mainDialpadButton) else emptyList()
         )
 
+        setupGlassBars()
         setupOptionsMenu()
         refreshMenuItems()
         storeStateVariables()
@@ -597,6 +601,46 @@ class MainActivity : SimpleActivity() {
         }
     }
 
+    /**
+     * GLASSMORPHISM
+     * Wires both BlurViews (bottom nav + top segmented pill) to the BlurTarget
+     * that wraps the ViewPager, and clips them to the rounded shape defined
+     * in glass_clip_shape.xml. Call once, right after setContentView.
+     */
+    private fun setupGlassBars() {
+        val blurRadius = 24f
+
+        listOf(binding.mainTabsBlurView, binding.mainTopTabsBackground).forEach { blurView ->
+            blurView
+                .setupWith(binding.blurTarget)
+                .setBlurRadius(blurRadius)
+
+            blurView.outlineProvider = ViewOutlineProvider.BACKGROUND
+            blurView.clipToOutline = true
+        }
+
+        // Give both bars a sensible default tint before the first theme pass runs
+        applyGlassTint(getProperBackgroundColor())
+    }
+
+    /**
+     * GLASSMORPHISM
+     * Frost tint that adapts to whichever background color the app's theme
+     * engine is currently using — light glass over dark themes, dark glass
+     * over light themes, the same way iOS adapts its blur tint.
+     */
+    private fun applyGlassTint(baseColor: Int) {
+        val isDarkBase = ColorUtils.calculateLuminance(baseColor) < 0.5
+        val tint = if (isDarkBase) {
+            Color.argb(70, 255, 255, 255)
+        } else {
+            Color.argb(50, 0, 0, 0)
+        }
+
+        binding.mainTabsBlurView.setOverlayColor(tint)
+        binding.mainTopTabsBackground.setOverlayColor(tint)
+    }
+
     private fun setupTabColors() {
         val properPrimaryColor = getProperPrimaryColor()
         // bottom tab bar
@@ -612,7 +656,10 @@ class MainActivity : SimpleActivity() {
             val bottomBarColor =
                 if (isDynamicTheme() && !isSystemInDarkMode()) getColoredMaterialStatusBarColor()
                 else getSurfaceColor()
-            binding.mainTabsHolder.setBackgroundColor(bottomBarColor)
+            // GLASSMORPHISM: mainTabsHolder itself stays transparent (see activity_main.xml) —
+            // the BlurView sitting behind it provides the frosted look. We only tint that
+            // BlurView here so the glass color still tracks whatever theme is active.
+            applyGlassTint(bottomBarColor)
         } else {
             // top tab bar
             val lastUsedPage = getDefaultTab()
