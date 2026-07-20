@@ -6,26 +6,16 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <com.goodwy.commons.views.MySearchMenu
-        android:id="@+id/mainMenu"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
-
+    <!-- 1. MAIN CONTENT AREA (List & Tabs) -->
+    <!-- HATA DIYA: app:layout_behavior. Ab ye screen ke top se bottom tak fail jayega -->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/mainHolder"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fillViewport="true"
-        android:scrollbars="none"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+        android:scrollbars="none">
 
-        <!--
-            GLASSMORPHISM
-            Everything the glass bars need to see "through" lives inside this
-            BlurTarget. The two BlurViews below (top pill + bottom nav) both
-            point at this same target, so they blur whatever the ViewPager is
-            currently showing behind them.
-        -->
+        <!-- BLUR TARGET (Jiske andar ViewPager list hai) -->
         <eightbitlab.com.blurview.BlurTarget
             android:id="@+id/blurTarget"
             android:layout_width="match_parent"
@@ -35,19 +25,19 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent">
 
+            <!-- MAGIC TRICK: clipToPadding & paddings added here! -->
+            <!-- Isse koi contact top/bottom bar ke peeche hamesha ke liye nahi chhupega -->
             <com.goodwy.commons.views.MyViewPager
                 android:id="@+id/viewPager"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
+                android:layout_height="match_parent"
+                android:clipToPadding="false"
+                android:paddingTop="85dp"
+                android:paddingBottom="100dp" />
 
         </eightbitlab.com.blurview.BlurTarget>
 
-        <!--
-            GLASSMORPHISM
-            Top segmented pill (used when the "top tabs" layout mode is active
-            instead of the bottom nav). Now floats OVER the list instead of
-            pushing it down, so there's actually content behind it to blur.
-        -->
+        <!-- Top segmented pill (used when the "top tabs" layout mode is active) -->
         <RelativeLayout
             android:id="@+id/mainTopTabsContainer"
             android:layout_width="match_parent"
@@ -96,6 +86,7 @@
                 app:tabSelectedTextColor="@android:color/white"/>
         </RelativeLayout>
 
+        <!-- Floating Action Buttons -->
         <com.goodwy.commons.views.MyFloatingActionButton
             android:id="@+id/main_dialpad_button"
             android:layout_width="wrap_content"
@@ -132,13 +123,7 @@
             app:rippleColor="@color/pressed_item_foreground"
             tools:alpha="1"/>
 
-        <!--
-            GLASSMORPHISM
-            Bottom nav — floats above the content with margin on all sides,
-            rounded, frosted, bordered. This is the iOS / WhatsApp-style bar.
-            mainTabsHolder keeps its original id, so no Kotlin call site needs
-            to change except the two lines noted in the instructions.
-        -->
+        <!-- BOTTOM NAV GLASS -->
         <FrameLayout
             android:id="@+id/mainTabsGlassWrapper"
             android:layout_width="match_parent"
@@ -169,4 +154,22 @@
                 app:tabRippleColor="@null"/>
         </FrameLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <!-- 2. TOP BAR (TELEGRAM STYLE GLASS) -->
+    <!-- Ye code ab mainHolder ke baad hai, isliye ye screen ke upar overlap/float karega -->
+    <eightbitlab.com.blurview.BlurView
+        android:id="@+id/topMenuBlurView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top">
+
+        <com.goodwy.commons.views.MySearchMenu
+            android:id="@+id/mainMenu"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:elevation="0dp" />
+            
+    </eightbitlab.com.blurview.BlurView>
+
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
