@@ -180,7 +180,10 @@ dependencies {
     implementation(libs.bundles.lifecycle)
     ksp(libs.androidx.room.compiler)
 
-    // 👇 YAHAN ADD KIYA HAI HAZE (GLASSMORPHISM) 👇
-    implementation("dev.chrisbanes.haze:haze:1.1.1")
-    implementation("dev.chrisbanes.haze:haze-materials:1.1.1")
+    // 👇 GLASSMORPHISM — BlurView 👇
+    // NOTE: Haze only works with Jetpack Compose. This app's UI is built with
+    // classic XML Views (Fragments + ViewBinding), so Haze had no effect here —
+    // it was never doing anything. BlurView is the equivalent library for
+    // View-based apps like this one, and is what activity_main.xml now uses.
+    implementation("com.github.Dimezis:BlurView:version-3.2.0")
 }
